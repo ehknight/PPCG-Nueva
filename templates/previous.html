@@ -38,15 +38,11 @@
                 <ul>
                   <li><a href="prizes.html">Prize List</a></li>
                   <li><a href="donate.html">Donate!</a></li>
-                </ul></li>
+                </ul> </li>
               <li><a href="leaderboard.html">Current Leaderboard</a></li>
             </ul>
           </li>
-          <li><a class="black">Previous Challenges</a>
-            <ul>
-              <li><a href="previous.html">List of Previous Challenges</a></li>
-              <li><a href="halloffame.html">Hall of Fame</a></li>
-            </ul>
+            <li><a href="previous.html">Previous Challenges</a></li>
           </li>
         </ul>
         <ul class="menu right">
@@ -69,24 +65,22 @@
     <body>
       <center>
         <h2>Previous Challenges</h2>
-        <h6>The Iterated Prisoner's Dilemma</h6>
       </center>
-      <div class="padded" style="max-width:800; margin-left:auto; margin-right:auto">
-        <strong>Your task:</strong>
-        <p>
-        You must write a program meeting the requirements in the overarching
-        competition rules that plays the iterated prisoner's dilemma. Your function
-        must take in parameters <tt>(round,opMoves,myMoves)</tt>, be titled <tt>main</tt>, and
-        return either <tt>True</tt> or <tt>False</tt>.
+      <div style="max-width:500px; margin-right:auto; margin-left:auto">
+          {% for name, challenge, rules in prevChallenges %}
+            <center>
+            <h5>{{ name }}</h5>
+          </center>
+          <div class="padded" style="max-width:800; margin-left:auto; margin-right:auto">
+            <strong>The challenge rules:</strong>
+            <p>
+              {{ challenge | safe}}
+            </p>
+            <strong>Your task:</strong>
+            <p>
+              {{ rules | safe}}
         </p>
-        <strong>The rules:</strong>
-        <p>
-          You will be awarded 5 points if you return <tt>False</tt> and your opponent
-          returns <tt>True</tt> and 0 points if it is the other way around. If both
-          you and your opponent return <tt>True</tt> you will be rewarded with
-          3 points. However, if both you and your opponent return <tt>False</tt>, you
-          will recieve 1 point. Your goal is to maximize your score after 20 rounds.
-        </p>
+          {% endfor %}
       </div>
     </body>
   </div>

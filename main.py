@@ -78,7 +78,8 @@ def currentruleshtml():
 
 @app.route('/previous.html')
 def previoushtml():
-    return render_template('previous.html')
+    return render_template('previous.html', prevChallenges=[\
+        [x["Name"],x["currentChallenge"],x["currentRules"]] for x in previousChallengesDB.all()]
 
 #code from http://code.runnable.com/UiPcaBXaxGNYAAAL/how-to-upload-a-file-to-the-server-in-flask-for-python
 
@@ -128,11 +129,6 @@ def prizeshtml():
 @app.route('/donate.html')
 def donatehtml():
     return render_template('donate.html')
-
-@app.route('/halloffame.html')
-def halloffamehtml():
-    scores=[('a',50),('b',100)]
-    return render_template('halloffame.html', scores=teamsScores)
 
 @app.route('/donateUpload', methods=['POST'])
 def donateUpload():
