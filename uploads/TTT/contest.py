@@ -102,7 +102,6 @@ def playMove(funcs, teamNum, board, curBoard, metaBoard, debug=False):
         bigWon = checkWin(metaBoard) #check to see if won meta board
         if bigWon != None:
             return ["BigWin", bigWon, board, metaBoard]
-            
         availSpots = avaliableSpots(board, metaBoard)
         if len(availSpots) == 0:
             return ["Draw", board, curBoard, metaBoard]
@@ -114,7 +113,6 @@ def playMove(funcs, teamNum, board, curBoard, metaBoard, debug=False):
                 curBoard = random.choice(availSpots)
         else:
             curBoard = move1
-            
     except AssertionError:
         if debug:
             print("Invalid move; skipping turn.")
@@ -146,9 +144,9 @@ def generateBlankBoard():
 def generateMetaBoard():
     return [[None for _ in range(3)] for _ in range(3)]
 
-def playMatch(rounds, team1, team1pick, team2, team2pick, debug=True):
+def playMatch(rounds, team1, team1pick, team2, team2pick, debug=False):
     board = generateBlankBoard()
-    printBoard(board)
+    # printBoard(board)
     metaBoard = generateMetaBoard()
     curBoard = [1, 1]
     funcs = {0:[team1, team1pick], 1:[team2, team2pick]}
@@ -298,23 +296,25 @@ def go(rounds, debug=False):
     for i in toDelete:
         TeamList.remove(i)
     scoreArray=[0 for x in range(len(TeamList))]
-    for foo in TeamList:
-        team1, team1pick = TeamFunctions[foo]
-        for bar in TeamList:
-            team2, team2pick = TeamFunctions[bar]
-            if (foo == bar):
-                break
-            if debug:
-                print("A match will now begin between "+foo+" and "+bar)
-            matchScore = playMatch(rounds, team1, team1pick, team2, team2pick)
-            if debug:
-                print(matchScore)
-            scoreArray[TeamList.index(foo)] += matchScore==0
-            scoreArray[TeamList.index(bar)] += matchScore==1
+    for _ in range(rounds):
+        for foo in TeamList:
+            team1, team1pick = TeamFunctions[foo]
+            for bar in TeamList:
+                team2, team2pick = TeamFunctions[bar]
+                if (foo == bar):
+                    break
+                if debug:
+                    print("A match will now begin between "+foo+" and "+bar)
+                matchScore = playMatch(rounds, team1, team1pick, team2, team2pick)
+                if debug:
+                    print(matchScore)
+                scoreArray[TeamList.index(foo)] += matchScore==0
+                scoreArray[TeamList.index(bar)] += matchScore==1
     if debug:
         print('-----------------------Game-Over-----------------------')
         print('After ' + str(rounds) + " rounds, the scores are:")
     bestScore = 0
+    print(scoreArray)
     bestScoreInd = 9999
     for p in range(len(TeamList)):
         if debug:
@@ -324,7 +324,10 @@ def go(rounds, debug=False):
             #print(bestScore)
             bestScoreInd = p
             #print(bestScoreInd)
-    print('The winner was: ' + TeamList[bestScoreInd])
+    try:
+        print('The winner was: ' + TeamList[bestScoreInd])
+    except IndexError:
+        pass
     completeScore = zip(TeamList, scoreArray)
     completeScore = sorted(completeScore, key = lambda x: x[1], reverse = True)
     return (completeScore, toDelete)

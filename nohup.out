@@ -5953,3 +5953,91 @@ WARNING:tornado.access:404 GET /stssys.htm (201.173.106.230) 0.85ms
 WARNING:tornado.access:404 POST /command.php (201.173.106.230) 0.99ms
 WARNING:tornado.access:404 GET /language/Swedish${IFS}&&echo${IFS}610cker>qt&&tar${IFS}/string.js (201.173.106.230) 0.84ms
 WARNING:tornado.access:404 GET /../../../../../../../mnt/mtd/qt (201.173.106.230) 0.77ms
+WARNING:tornado.access:404 GET http://www.baidu.com/ (123.151.42.61) 0.84ms
+ERROR:main:Exception on /run [GET]
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1817, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1477, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1381, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1475, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1461, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/ubuntu/ppcg-nueva/main.py", line 134, in run
+    totalReturn=contestMain(20)
+  File "/home/ubuntu/ppcg-nueva/uploads/PD/contest.py", line 104, in go
+    trans = js2py.eval_js(jfunc)
+  File "/usr/local/lib/python2.7/dist-packages/js2py/evaljs.py", line 43, in eval_js
+    return e.eval(js)
+  File "/usr/local/lib/python2.7/dist-packages/js2py/evaljs.py", line 85, in eval
+    self.execute(code)
+  File "/usr/local/lib/python2.7/dist-packages/js2py/evaljs.py", line 80, in execute
+    exec(code, self._context)
+  File "<string>", line 2, in <module>
+  File "/usr/local/lib/python2.7/dist-packages/js2py/base.py", line 827, in __call__
+    return self.call(self.GlobalObject, args)
+  File "/usr/local/lib/python2.7/dist-packages/js2py/base.py", line 1267, in call
+    return Js(self.code(*args))
+  File "/usr/local/lib/python2.7/dist-packages/js2py/host/jseval.py", line 16, in Eval
+    py_code = translate_js(code.to_string().value, '')
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/translator.py", line 31, in translate_js
+    parsed = parser.parse(js) # js to esprima syntax tree
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 2862, in parse
+    program = self.parseProgram();
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 2833, in parseProgram
+    body = self.parseScriptBody()
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 2822, in parseScriptBody
+    statement = self.parseStatementListItem();
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1983, in parseStatementListItem
+    return self.parseStatement();
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 2568, in parseStatement
+    expr = self.parseExpression();
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1949, in parseExpression
+    expr = self.isolateCoverGrammar(self.parseAssignmentExpression)
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1126, in isolateCoverGrammar
+    result = parser()
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1939, in parseAssignmentExpression
+    right = self.isolateCoverGrammar(self.parseAssignmentExpression)
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1126, in isolateCoverGrammar
+    result = parser()
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1916, in parseAssignmentExpression
+    expr = self.parseConditionalExpression();
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1817, in parseConditionalExpression
+    expr = self.inheritCoverGrammar(self.parseBinaryExpression);
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1141, in inheritCoverGrammar
+    result = parser()
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1765, in parseBinaryExpression
+    left = self.inheritCoverGrammar(self.parseUnaryExpression);
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1141, in inheritCoverGrammar
+    result = parser()
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1741, in parseUnaryExpression
+    expr = self.parsePostfixExpression()
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1694, in parsePostfixExpression
+    expr = self.inheritCoverGrammar(self.parseLeftHandSideExpressionAllowCall)
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1141, in inheritCoverGrammar
+    result = parser()
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1631, in parseLeftHandSideExpressionAllowCall
+    expr = self.inheritCoverGrammar(self.parseNewExpression if self.matchKeyword('new') else self.parsePrimaryExpression)
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1141, in inheritCoverGrammar
+    result = parser()
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1543, in parsePrimaryExpression
+    return self.parseFunctionExpression()
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 2780, in parseFunctionExpression
+    body = self.parseFunctionSourceElements();
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 2627, in parseFunctionSourceElements
+    body.append(self.parseStatementListItem())
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1983, in parseStatementListItem
+    return self.parseStatement();
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 2552, in parseStatement
+    return self.parseIfStatement(node);
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 2138, in parseIfStatement
+    self.expect('(');
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1024, in expect
+    self.throwUnexpectedToken(token)
+  File "/usr/local/lib/python2.7/dist-packages/js2py/translators/pyjsparser.py", line 1013, in throwUnexpectedToken
+    raise self.unexpectedTokenError(token, message)
+PyJsException: SyntaxError: Line 2: Unexpected identifier
+ERROR:tornado.access:500 GET /run (173.13.157.178) 63.46ms

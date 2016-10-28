@@ -145,7 +145,7 @@ def run():
     print('running judge program')
     global teamsScores
     global ignoreList
-    totalReturn=TTT_contestMain(20)
+    totalReturn=TTT_contestMain(15)
     teamsScores=totalReturn[0]
     ignoreList=totalReturn[1]
     return redirect('/leaderboard.html')
