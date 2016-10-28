@@ -176,8 +176,7 @@ def accounthtml():
             tempPN = 'No Program Submitted (yet!)'
     return render_template('account.html', name = user.given_name,
                            email = user.email,
-                           programName =
-                           tempPN)
+                           programName = tempPN)
 
 @app.route('/leaderboard.html')
 def leaderboardhtml():
@@ -187,10 +186,6 @@ def leaderboardhtml():
 @app.route('/favicon.ico')
 def faviconico():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/png')
-
-def archiveCurrentChallenge():
-    prizeDB.insert({'name':currentChallengeName, 'task':currentTask,
-                    'rules':currentRules})
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', port = 80, debug=DEBUG, use_reloader=True)
