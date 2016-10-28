@@ -309,8 +309,8 @@ def go(rounds, debug=False):
             matchScore = playMatch(rounds, team1, team1pick, team2, team2pick)
             if debug:
                 print(matchScore)
-            scoreArray[TeamList.index(foo)] += matchScore[1]
-            scoreArray[TeamList.index(bar)] += matchScore[0]
+            scoreArray[TeamList.index(foo)] += matchScore==0
+            scoreArray[TeamList.index(bar)] += matchScore==1
     if debug:
         print('-----------------------Game-Over-----------------------')
         print('After ' + str(rounds) + " rounds, the scores are:")

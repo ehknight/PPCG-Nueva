@@ -34,33 +34,34 @@ Challenge = Query()
 
 currentChallengeName="""Meta Tic-Tac-Toe"""
 
-currentRules="""You must write a program to play the exciting game of meta tic-tac-toe!
-
+currentRules="""<p>You must write a program to play the exciting game of meta tic-tac-toe!</p>
+<p>
 There are a couple of variations out there, but here is how we play it: We have a standard tic-tac-toe board but in each square there is another tic-tac-toe board. The turn flow works something like this:
 <ol>
 <li>If it is the first turn, Player 1 places an "O" in one of the squares in the center board. If not, Player 1 places an "O" in the board that coresponds to the square that Player 2 played in.</li>
 <li>Player 2 then goes in the board corresponding to which square Player 1 played in. For example, if Player 1 goes in the top right square, Player 2 must play in the top right board.</li>
 <li> Rinse and repeat until someone wins three meta-boards in a row, column, or diagonal, similar to tic-tac-toe.</li>
 </ol>
-
+</p>
+<p>
 If a board is filled up, then you get to pick which board you want to play on! (See next section for details.) If you send yourself to a filled up board, a random not-filled up board will be given to you.
-
+</p><p>
 Because basic meta-tic-tac-toe is solved, we're adding a twist! Two people can win a board, which count towards winning the big meta-board for both of them.
+</p><p>
+If that made no sense, visit <a href="https://s3.amazonaws.com/mpacampcashchallenge/UltimateTicTacToe.pdf">this</a> link to get a sense of what's going on, then read the rules again because there are some changes.</p>"""
 
-If that made no sense, visit <a href="https://s3.amazonaws.com/mpacampcashchallenge/UltimateTicTacToe.pdf">this</a> link to get a sense of what's going on, then read the rules again because there are some changes."""
-
-currentTask="""
+currentTask="""<p>
 You must write a program meeting the requirements in the overarching competition rules that plays meta tic-tac-toe, consiting of two functions:
-
+</p><p>
 Your function <tt>main</tt> must take in parameters <tt>(team, board, currentBoard, metaBoard)</tt>. <tt>teamNum</tt> is either 1 or 0 and corresponds to "O" or "X". <tt>currentState</tt> is the current state of the board, being a list of rows in a list of columns in a list of board rows in a list of board columns.
-
+</p><p>
 So, if a game with a center board which has a 0 in the top-right corner of the center board were a curState, it would look like: <tt>[[[['','',''],['','',''],['','','']],[['','',''],['','',''],['','','']],[['','',''],['','',''],['','','']]],[[['','',''],['','',''],['','','']],[['','','0'],['','',''],['','','']],[['','',''],['','',''],['','','']]],[[['','',''],['','',''],['','','']],[['','',''],['','',''],['','','']],[['','',''],['','',''],['','','']]]]</tt>. You can put that into Python or JavaScript and moneky around with that, if you like. 
-
+</p><p>
 You could access that top-right "0" element by doing curState[1][1][0][2]. (In English this translates to "Give me the second row of the board, then give me the second board of that, then give me the first row of the board, then give me the third column of that".) <tt>currentBoard</tt> is a list of length 2. For example, if you were playing in the top-middle square, it activeBoardNum would be [0,1]. <tt>metaBoard</tt> is a 3x3 array of boards won. For example, if Player 0 has won the top left board it would look like <tt>[['0','',''],['','',''],['','','']]</tt>. Your function must return a list of length two of where you want to put your piece. For instance, if you want to go in the top right corner, your <tt>main</tt> function would return <tt>[0,2]</tt>.
-
+</p><p>
 You'll also write a function <tt>pick</tt> which picks a board for you to play on, should your opponent send you to a filled up square. Your function <tt>pick</tt> must take in parameters <tt>(team, board, metaBoard)</tt> and return a list of length 2. For instance, if you wanted to play on the middle-middle board, your pick function would return <tt>[1,1]</tt>.
-
-Thanks for taking part in PPCG. Good luck and have fun!"""
+</p><p>
+Thanks for taking part in PPCG. Good luck and have fun!</p>"""
 
 @app.route('/')
 def initialHomehtml():
@@ -79,7 +80,7 @@ def currentruleshtml():
 @app.route('/previous.html')
 def previoushtml():
     return render_template('previous.html', prevChallenges=[\
-        [x["Name"],x["currentChallenge"],x["currentRules"]] for x in previousChallengesDB.all()]
+        [x["Name"],x["currentChallenge"],x["currentRules"]] for x in previousChallengesDB.all()])
 
 #code from http://code.runnable.com/UiPcaBXaxGNYAAAL/how-to-upload-a-file-to-the-server-in-flask-for-python
 
@@ -144,7 +145,7 @@ def run():
     print('running judge program')
     global teamsScores
     global ignoreList
-    totalReturn=contestMain(20)
+    totalReturn=TTT_contestMain(20)
     teamsScores=totalReturn[0]
     ignoreList=totalReturn[1]
     return redirect('/leaderboard.html')

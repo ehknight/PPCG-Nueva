@@ -74,11 +74,12 @@
           <div class="padded" style="max-width:800; margin-left:auto; margin-right:auto">
             <strong>The challenge rules:</strong>
             <p>
-              {{ challenge | safe}}
+              {{ rules | safe}}
             </p>
             <strong>Your task:</strong>
             <p>
-              {{ rules | safe}}
+                {{ challenge | safe}}
+              
         </p>
           {% endfor %}
       </div>
