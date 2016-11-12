@@ -1,0 +1,11 @@
+*
+
+!.gitignore
+!contest.py
+!__init__.py
+#Example Programs
+!Always [1,1].py
+!Random Picker.py
+
+# ...even if they are in subdirectories
+!*/

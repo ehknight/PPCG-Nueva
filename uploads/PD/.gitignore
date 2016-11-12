@@ -1,0 +1,7 @@
+*
+
+!.gitignore
+!contest.py
+!__init__.py
+
+!*/
