@@ -192,7 +192,7 @@ def submit_econ():
 
 @app.route('/upload-econ', methods=['POST'])
 @login_required
-def upload():
+def upload_econ():
     print ('ECON: '+str(user.given_name)+'just uploaded a new program!')
     file = request.files['file']
     checks = request.form.getlist('check')
@@ -214,7 +214,7 @@ def upload():
         return render_template('index.html', success=False)
 
 @app.route('/run-econ')
-def run():
+def run_econ():
     print('ECON: running judge program')
     global econ_teamsScores
     global econ_ignoreList
@@ -224,7 +224,7 @@ def run():
     return redirect('/leaderboard-econ.html')
 
 @app.route('/leaderboard-econ.html')
-def leaderboardhtml():
+def leaderboard_econhtml():
     return render_template('leaderboard.html',scores=econ_teamsScores,
                            ignoreLen = len(econ_ignoreList), ignore=econ_ignoreList)
 
