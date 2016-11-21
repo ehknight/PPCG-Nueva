@@ -61,36 +61,58 @@
   </div>
 </header>
 <main>
-  {% if checked==False %}
-    <script>alert('Please check the agree box')</script>
-  {% endif %}
   <div class=padded max900>
     <center>
-      <h5>Submit your solution for the Meta-Tic-Tac-Toe challenge</h5>
+      <h5>Here are the standings for the Econ Prisoner's Dilemma</h5>
+      <div style="max-width:500px; margin-right:auto; margin-left:auto">
+        <table class="fill center">
+          <thead>
+            <tr>
+              <td>
+                Name
+              </td>
+              <td>
+                Score
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in scores %}
+              <tr style="center">
+              <td>{{ i[0] }}</td> <td>{{ i[1] }}</td>
+            {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </center>
+      {% if ignoreLen > 0 %}
+        <div style = "max-width:600px; margin-left:auto; margin-right:auto">
+          <p>
+            Please note - the following programs did not run correctly:
+          </p>
+          <p>
+            <center>
+              {{ ignore }}
+            </center>
+          </p>
+          <p>
+            If you are the owner of one of these submissions, please double check
+            the current rules and the site rules and resubmit. Thanks!
+          </p>
+        </div>
+      {% endif %}
+    <center>
+      <a class="btn large green rounded" href="run-econ" onclick="javascript:showpBar();"> Run </a>
+      <script type="text/javascript">
+        function showpBar() {
+            document.getElementById('pBar').style.display = "block";
+        }
+      </script>
+      <div class="progress fill" id = "pBar" style="max-width:400px; margin-left:auto; margin-right:auto">
+        <div class="indeterminate"></div>
+      </div>
     </center>
   </div>
-    <form action = "upload" method = "post" enctype = "multipart/form-data">
-      <div class=padded max900 style="max-width:500px margin-left:auto margin-right:auto">
-        <div class="container">
-          <label class="quarter right">Upload program</label>
-          <div class="half">
-            <input type="file" name="file">
-          </div>
-        </div>
-        <div class="container">
-          <label class="quarter right"></label>
-          <div class="half">
-            <input type = "checkbox" name="check" value="agreed" />
-            I agree not to do anything stupid and follow the rules
-          </div>
-        </div>
-        <div class="container">
-          <label class="quarter right"></label>
-          <div class="half">
-            <input type="submit" value = "Submit">
-          </div>
-        </div>
-      </div>
-    </form>
 </main>
 </html>

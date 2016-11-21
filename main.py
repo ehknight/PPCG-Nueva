@@ -12,7 +12,7 @@ from random import randrange
 app = Flask(__name__)
 DEBUG = False
 
-app.config['SECRET_KEY'] = 'pastaelephantgreenleafshoe'
+app.config['SECRET_KEY'] = open("secretkey.txt").read()
 app.config['STORMPATH_API_KEY_FILE'] = '~/.stormpath/apiKey.properties'
 app.config['STORMPATH_APPLICATION'] = 'PPCG@Nueva'
 app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
@@ -22,10 +22,13 @@ stormpath_manager = StormpathManager(app)
 challengeAcronym = "TTT"
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'+challengeAcronym
+app.config['ECON_UPLOAD_FOLDER'] = 'econ-uploads/'+challengeAcronym
 app.config['ALLOWED_EXTENSIONS'] = set(['py','js'])
 
-teamsScores=[]
-ignoreList=[]
+teamsScores = []
+ignoreList = []
+econ_teamsScores = []
+econ_ignoreList = []
 
 prizeDB = TinyDB(os.curdir+'/databases/prizeDB.json')
 previousChallengesDB = TinyDB(os.curdir+'/databases/previousChallengesDB.json')
@@ -177,6 +180,53 @@ def accounthtml():
     return render_template('account.html', name = user.given_name,
                            email = user.email,
                            programName = tempPN)
+
+@app.route("/prisoners-dilemma.html")
+def prisonersdilemma():
+    return render_template('prisoners-dilemma.html')
+
+@app.route("/submit-econ.html")
+@login_required
+def submit_econ():
+    return render_template('submit-econ.html')
+
+@app.route('/upload-econ', methods=['POST'])
+@login_required
+def upload():
+    print ('ECON: '+str(user.given_name)+'just uploaded a new program!')
+    file = request.files['file']
+    checks = request.form.getlist('check')
+    checked=False
+    try:
+        checks[0]
+        checked=True
+    except:
+        pass
+    if not checked:
+        return render_template('submit-econ.html', checked=checked)
+    elif file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        uniqueFilename= user.given_name+' '+user.surname+'.'+fileExt(filename)
+        file.save(os.path.join(app.config['ECON_UPLOAD_FOLDER'], uniqueFilename))
+        user.custom_data['programName'] = uniqueFilename
+        return render_template('index.html', success=True)
+    else:
+        return render_template('index.html', success=False)
+
+@app.route('/run-econ')
+def run():
+    print('ECON: running judge program')
+    global econ_teamsScores
+    global econ_ignoreList
+    totalReturn=PD_contestMain(20)
+    econ_teamsScores=totalReturn[0]
+    econ_ignoreList=totalReturn[1]
+    return redirect('/leaderboard-econ.html')
+
+@app.route('/leaderboard-econ.html')
+def leaderboardhtml():
+    return render_template('leaderboard.html',scores=econ_teamsScores,
+                           ignoreLen = len(econ_ignoreList), ignore=econ_ignoreList)
 
 @app.route('/leaderboard.html')
 def leaderboardhtml():

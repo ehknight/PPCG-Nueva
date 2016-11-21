@@ -1,4 +1,5 @@
 **/.DS_Store
+flask_secretkey.txt
 
 #From https://github.com/github/gitignore
 # Byte-compiled / optimized / DLL files
