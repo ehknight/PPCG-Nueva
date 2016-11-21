@@ -225,7 +225,7 @@ def run_econ():
 
 @app.route('/leaderboard-econ.html')
 def leaderboard_econhtml():
-    return render_template('leaderboard.html',scores=econ_teamsScores,
+    return render_template('leaderboard-econ.html',scores=econ_teamsScores,
                            ignoreLen = len(econ_ignoreList), ignore=econ_ignoreList)
 
 @app.route('/leaderboard.html')
