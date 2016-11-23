@@ -6,6 +6,7 @@ from ast import literal_eval
 from flask.ext.stormpath import StormpathManager,login_required, user
 
 from uploads.PD.contest import go as PD_contestMain
+from econuploads.contest import go as econ_contestMain
 from uploads.TTT.contest import go as TTT_contestMain
 from random import randrange
 
@@ -22,7 +23,7 @@ stormpath_manager = StormpathManager(app)
 challengeAcronym = "TTT"
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'+challengeAcronym
-app.config['ECON_UPLOAD_FOLDER'] = 'econ-uploads/'+challengeAcronym
+app.config['ECON_UPLOAD_FOLDER'] = 'econuploads/'
 app.config['ALLOWED_EXTENSIONS'] = set(['py','js'])
 
 teamsScores = []
@@ -218,7 +219,7 @@ def run_econ():
     print('ECON: running judge program')
     global econ_teamsScores
     global econ_ignoreList
-    totalReturn=PD_contestMain(20)
+    totalReturn=econ_contestMain(20)
     econ_teamsScores=totalReturn[0]
     econ_ignoreList=totalReturn[1]
     return redirect('/leaderboard-econ.html')
