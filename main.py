@@ -235,7 +235,7 @@ def leaderboard_econ_html():
 @app.route('/submit-econ-with-noise.html')
 @login_required
 def submit_econ_with_noise():
-    return render_template('submit-econ-with-noise.html)
+    return render_template('submit-econ-with-noise.html')
 
 @app.route('/upload-econ-with-noise', methods=['POST'])
 @login_required
