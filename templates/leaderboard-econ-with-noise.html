@@ -62,35 +62,58 @@
 </header>
 <main>
   <div class=padded max900>
-    <body>
-      <center>
-        <h2>Challenge for Patrick's Econ Class</h2>
-      </center>
+    <center>
+      <h5>Here are the standings for the Econ Prisoner's Dilemma (WITH SIGNAL NOISE)
+      </h5>
       <div style="max-width:500px; margin-right:auto; margin-left:auto">
-        <center>
-            <h5>The Prisoner's Dilemma Challenge</h5>
-          </center>
-          <div class="padded" style="max-width:800; margin-left:auto; margin-right:auto">
-              <strong>Your task:</strong>
-            <p>
-              You will be awarded 5 points if you return <tt>False</tt> and your opponent returns <tt>True</tt> and 0 points if it is the other way around. If both you and your opponent return <tt>True</tt> you will be rewarded with 3 points, however if both you and your opponent return <tt>False</tt>, you will recieve 1 point. Your goal is to maximize your score after 20 rounds.
-            </p>
-            <strong>The challenge rules:</strong>
-            <p>
-              You must write a program meeting the requirements in the general competition rules that plays the iterated prisoner's dilemma. Your function must take in parameters <tt>(round,opMoves,myMoves)</tt>, be titled <tt>main</tt>, and return either <tt>True</tt> or <tt>False</tt>.
-            </p>
+        <table class="fill center">
+          <thead>
+            <tr>
+              <td>
+                Name
+              </td>
+              <td>
+                Score
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in scores %}
+              <tr style="center">
+              <td>{{ i[0] }}</td> <td>{{ i[1] }}</td>
+            {% endfor %}
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <center>
-        <h6> No Noise </h6>
-        <a class="btn large red rounded" href="submit-econ.html">Submit</a>
-        <a class="btn large blue rounded" href="leaderboard-econ.html">Leaderboard</a>
       </center>
-      <center>
-        <h6> With Noise </h6>
-        <a class="btn large red rounded" href="submit-econ-with-noise.html">Submit</a>
-        <a class="btn large blue rounded" href="leaderboard-econ-with-noise.html">Leaderboard</a>
-      </center>
-    </body>
+      {% if ignoreLen > 0 %}
+        <div style = "max-width:600px; margin-left:auto; margin-right:auto">
+          <p>
+            Please note - the following programs did not run correctly:
+          </p>
+          <p>
+            <center>
+              {{ ignore }}
+            </center>
+          </p>
+          <p>
+            If you are the owner of one of these submissions, please double check
+            the current rules and the site rules and resubmit. Thanks!
+          </p>
+        </div>
+      {% endif %}
+    <center>
+      <a class="btn large green rounded" href="run-econ-with-noise" onclick="javascript:showpBar();"> Run </a>
+      <script type="text/javascript">
+        function showpBar() {
+            document.getElementById('pBar').style.display = "block";
+        }
+      </script>
+      <div class="progress fill" id = "pBar" style="max-width:400px; margin-left:auto; margin-right:auto">
+        <div class="indeterminate"></div>
+      </div>
+    </center>
   </div>
 </main>
 </html>

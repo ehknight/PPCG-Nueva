@@ -80,6 +80,8 @@ def go(rounds):
             print 'imported '+str(TeamList[teamNum])
             signal.alarm(2)
             try:
+                a = new_module.main(0,[],[])
+                a = new_module.main(1,[1],[0])
                 a = new_module.main(5,[0,0,0,0,0,0],[1,0,1,0,1,0])
             except TimeoutException:
                 print 'Error code T'

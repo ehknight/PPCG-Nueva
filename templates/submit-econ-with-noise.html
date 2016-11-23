@@ -61,36 +61,36 @@
   </div>
 </header>
 <main>
+  {% if checked==False %}
+    <script>alert('Please check the agree box')</script>
+  {% endif %}
   <div class=padded max900>
-    <body>
-      <center>
-        <h2>Challenge for Patrick's Econ Class</h2>
-      </center>
-      <div style="max-width:500px; margin-right:auto; margin-left:auto">
-        <center>
-            <h5>The Prisoner's Dilemma Challenge</h5>
-          </center>
-          <div class="padded" style="max-width:800; margin-left:auto; margin-right:auto">
-              <strong>Your task:</strong>
-            <p>
-              You will be awarded 5 points if you return <tt>False</tt> and your opponent returns <tt>True</tt> and 0 points if it is the other way around. If both you and your opponent return <tt>True</tt> you will be rewarded with 3 points, however if both you and your opponent return <tt>False</tt>, you will recieve 1 point. Your goal is to maximize your score after 20 rounds.
-            </p>
-            <strong>The challenge rules:</strong>
-            <p>
-              You must write a program meeting the requirements in the general competition rules that plays the iterated prisoner's dilemma. Your function must take in parameters <tt>(round,opMoves,myMoves)</tt>, be titled <tt>main</tt>, and return either <tt>True</tt> or <tt>False</tt>.
-            </p>
-      </div>
-      <center>
-        <h6> No Noise </h6>
-        <a class="btn large red rounded" href="submit-econ.html">Submit</a>
-        <a class="btn large blue rounded" href="leaderboard-econ.html">Leaderboard</a>
-      </center>
-      <center>
-        <h6> With Noise </h6>
-        <a class="btn large red rounded" href="submit-econ-with-noise.html">Submit</a>
-        <a class="btn large blue rounded" href="leaderboard-econ-with-noise.html">Leaderboard</a>
-      </center>
-    </body>
+    <center>
+      <h5>Submit your solution for the Iterated Prisoner's Dilemma (WITH SIGNAL NOISE)</h5>
+    </center>
   </div>
+    <form action = "upload-econ-with-noise" method = "post" enctype = "multipart/form-data">
+      <div class=padded max900 style="max-width:500px margin-left:auto margin-right:auto">
+        <div class="container">
+          <label class="quarter right">Upload program</label>
+          <div class="half">
+            <input type="file" name="file">
+          </div>
+        </div>
+        <div class="container">
+          <label class="quarter right"></label>
+          <div class="half">
+            <input type = "checkbox" name="check" value="agreed" />
+            I agree not to do anything stupid and follow the rules
+          </div>
+        </div>
+        <div class="container">
+          <label class="quarter right"></label>
+          <div class="half">
+            <input type="submit" value = "Submit">
+          </div>
+        </div>
+      </div>
+    </form>
 </main>
 </html>

@@ -24,12 +24,15 @@ challengeAcronym = "TTT"
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'+challengeAcronym
 app.config['ECON_UPLOAD_FOLDER'] = 'econuploads/'
+app.config['ECON_SIGNAL_UPLOAD_FOLDER'] = 'econuploads-with-noise/'
 app.config['ALLOWED_EXTENSIONS'] = set(['py','js'])
 
 teamsScores = []
 ignoreList = []
 econ_teamsScores = []
 econ_ignoreList = []
+econ_signal_teamsScores = []
+econ_signal_ignoreList = []
 
 prizeDB = TinyDB(os.curdir+'/databases/prizeDB.json')
 previousChallengesDB = TinyDB(os.curdir+'/databases/previousChallengesDB.json')
@@ -225,9 +228,53 @@ def run_econ():
     return redirect('/leaderboard-econ.html')
 
 @app.route('/leaderboard-econ.html')
-def leaderboard_econhtml():
+def leaderboard_econ_html():
     return render_template('leaderboard-econ.html',scores=econ_teamsScores,
                            ignoreLen = len(econ_ignoreList), ignore=econ_ignoreList)
+
+@app.route('/submit-econ-with-noise.html')
+@login_required
+def submit_econ_with_noise():
+    return render_template('submit-econ-with-noise.html')
+
+@app.route('/upload-econ-with-noise', methods=['POST'])
+@login_required
+def upload_econ_with_noise():
+    print ('ECON WITH NOISE: '+str(user.given_name)+'just uploaded a new program!')
+    file = request.files['file']
+    checks = request.form.getlist('check')
+    checked=False
+    try:
+        checks[0]
+        checked=True
+    except:
+        pass
+    if not checked:
+        return render_template('submit-econ-with-noise.html', checked=checked)
+    elif file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        uniqueFilename= user.given_name+' '+user.surname+'.'+fileExt(filename)
+        file.save(os.path.join(app.config['ECON_SIGNAL_UPLOAD_FOLDER'], uniqueFilename))
+        user.custom_data['programName'] = uniqueFilename
+        return render_template('index.html', success=True)
+    else:
+        return render_template('index.html', success=False)
+
+@app.route('/run-econ-with-noise')
+def run_econ_with_noise():
+    print('ECON: running judge program')
+    global econ_signal_teamsScores
+    global econ_signal_ignoreList
+    totalReturn = econ_contestMain(20)
+    econ_signal_teamsScores=totalReturn[0]
+    econ_signal_ignoreList=totalReturn[1]
+    return redirect('/leaderboard-econ-with-noise.html')
+
+@app.route('/leaderboard-econ-with-noise.html')
+def leaderboard_econ_with_noise_html():
+    return render_template('leaderboard-econ-with-noise.html',scores=econ_signal_teamsScores,
+                           ignoreLen = len(econ_signal_ignoreList), ignore=econ_signal_ignoreList)
+
 
 @app.route('/leaderboard.html')
 def leaderboardhtml():

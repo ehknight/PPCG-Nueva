@@ -29,6 +29,13 @@ def Comparator(rounds, Team1, Team2):
     AHistory = []
     BHistory = []
     for i in xrange(rounds):
+        flipped = False
+        if randrange(1,11)==10:
+            try:
+                BHistory[-1] = not BHistory[-1]
+                flipped = True
+            except IndexError:
+                pass
         AMove = Team1(i, BHistory, AHistory)
         BMove = Team2(i, AHistory, BHistory)
         if debug:
@@ -55,10 +62,12 @@ def Comparator(rounds, Team1, Team2):
             BHistory.append(0)
         ATotal+=AScore
         BTotal+=BScore
+        if flipped:
+            BHistory[-1] = not BHistory[-1]
     return (ATotal, BTotal)
 
 def go(rounds):
-    TeamList=[x[0:-3] for x in os.listdir(os.curdir+'/uploads/PD') if x!='contest.py'
+    TeamList=[x[0:-3] for x in os.listdir(os.curdir+'/econuploads-with-noise') if x!='contest.py'
               and x[-3:]!='pyc' and x!='__init__.py' and x!='.DS_Store'
               and x[0]!='.']
     if debug:
@@ -66,7 +75,7 @@ def go(rounds):
     TeamFunctions={}
     combinedArray={}
 
-    sys.path.insert(0, './uploads/PD')
+    sys.path.insert(0, './econuploads-with-noise/')
     for i in range(len(TeamList)):
         combinedArray[TeamList[i]]=0
     signal.signal(signal.SIGALRM, timeout_handler)
@@ -102,7 +111,7 @@ def go(rounds):
         except ImportError:
             try:
                 t = str(''.join(list(TeamList[teamNum])[::1]))
-                jfunc=(open('./uploads/PD/'+t+'.js','r')).read()
+                jfunc=(open('./econuploads-with-noise/'+t+'.js','r')).read()
                 trans = js2py.eval_js(jfunc)
                 try:
                     signal.alarm(2)
