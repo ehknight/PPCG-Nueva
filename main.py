@@ -7,6 +7,7 @@ from flask.ext.stormpath import StormpathManager,login_required, user
 
 from uploads.PD.contest import go as PD_contestMain
 from econuploads.contest import go as econ_contestMain
+from econuploadswithnoise.contest import go as econ_noise_contestMain
 from uploads.TTT.contest import go as TTT_contestMain
 from random import randrange
 
@@ -26,6 +27,7 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'+challengeAcronym
 app.config['ECON_UPLOAD_FOLDER'] = 'econuploads/'
 app.config['ECON_SIGNAL_UPLOAD_FOLDER'] = 'econuploads-with-noise/'
 app.config['ALLOWED_EXTENSIONS'] = set(['py','js'])
+app.config['ROUND_NUMBERS'] = 30
 
 teamsScores = []
 ignoreList = []
@@ -222,7 +224,7 @@ def run_econ():
     print('ECON: running judge program')
     global econ_teamsScores
     global econ_ignoreList
-    totalReturn=econ_contestMain(20)
+    totalReturn=econ_contestMain(app.config['ROUND_NUMBERS'])
     econ_teamsScores=totalReturn[0]
     econ_ignoreList=totalReturn[1]
     return redirect('/leaderboard-econ.html')
@@ -265,7 +267,7 @@ def run_econ_with_noise():
     print('ECON: running judge program')
     global econ_signal_teamsScores
     global econ_signal_ignoreList
-    totalReturn = econ_contestMain(20)
+    totalReturn = econ_noise_contestMain(app.config['ROUND_NUMBERS'])
     econ_signal_teamsScores=totalReturn[0]
     econ_signal_ignoreList=totalReturn[1]
     return redirect('/leaderboard-econ-with-noise.html')
