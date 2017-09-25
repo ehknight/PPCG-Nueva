@@ -17,8 +17,8 @@ debug = False
 
 def copy_func(f, name=None):
     #https://stackoverflow.com/questions/6527633/how-can-i-make-a-deepcopy-of-a-function-in-python
-    return types.FunctionType(f.func_code, f.func_globals, name or f.func_name,
-        f.func_defaults, f.func_closure)
+    return types.FunctionType(f.__code__, f.__globals__, name or f.__name__,
+        f.__defaults__, f.__closure__)
 
 
 def Comparator(rounds, Team1, Team2):
@@ -28,11 +28,11 @@ def Comparator(rounds, Team1, Team2):
     BScore = 0
     AHistory = []
     BHistory = []
-    for i in xrange(rounds):
+    for i in range(rounds):
         AMove = Team1(i, BHistory, AHistory)
         BMove = Team2(i, AHistory, BHistory)
         if debug:
-            print(AMove, BMove)
+            print((AMove, BMove))
         if (AMove) and (BMove):
             AScore = AScore + 2
             AHistory.append(1)
@@ -62,7 +62,7 @@ def go(rounds):
               and x[-3:]!='pyc' and x!='__init__.py' and x!='.DS_Store'
               and x[0]!='.']
     if debug:
-        print TeamList
+        print(TeamList)
     TeamFunctions={}
     combinedArray={}
 
@@ -71,31 +71,31 @@ def go(rounds):
         combinedArray[TeamList[i]]=0
     signal.signal(signal.SIGALRM, timeout_handler)
     toDelete=[]
-    for teamNum in xrange(len(TeamList)):
+    for teamNum in range(len(TeamList)):
         signal.alarm(0)
         try:
             new_module=__import__(TeamList[teamNum])
             new_module = reload(new_module)
             t = str(TeamList[teamNum])
-            print 'imported '+str(TeamList[teamNum])
+            print(('imported '+str(TeamList[teamNum])))
             signal.alarm(2)
             try:
                 a = new_module.main(0,[],[])
                 a = new_module.main(1,[1],[0])
                 a = new_module.main(5,[0,0,0,0,0,0],[1,0,1,0,1,0])
             except TimeoutException:
-                print 'Error code T'
-                print 'Signal timed out'
+                print('Error code T')
+                print('Signal timed out')
                 raise AssertionError
             except:
-                print 'Error code 1'
-                print 'Program failed to compile'
+                print('Error code 1')
+                print('Program failed to compile')
                 raise AssertionError
             finally:
                 signal.alarm(0)
             if a!=True and a!=False and a!=1 and a!=0:
-                print 'Error code 2'
-                print 'Function returned unexpected value'
+                print('Error code 2')
+                print('Function returned unexpected value')
                 raise AssertionError
             else:
                 TeamFunctions[t] = new_module.main
@@ -109,13 +109,13 @@ def go(rounds):
                     try:
                         a = trans(5,[0,0,0,0,0,0],[1,0,1,0,1,0])
                     except:
-                        print 'Error code 3'
-                        print 'Signal timed out'
+                        print('Error code 3')
+                        print('Signal timed out')
                         raise AssertionError
                     if a!=True and a!=False and a!=1 and a!=0:
-                        print 'Error code 4'
-                        print 'Function returned unexpected value'
-                        print 'Function returned '+str(a)
+                        print('Error code 4')
+                        print('Function returned unexpected value')
+                        print(('Function returned '+str(a)))
                         raise AssertionError
                     else:
                         raise SeemsToWork
@@ -127,9 +127,9 @@ def go(rounds):
             except AssertionError:
                 toDelete.append(TeamList[teamNum])
         except:
-            print 'Error code 6'
-            print 'WTF'
-            print('ignoring '+TeamList[teamNum])
+            print('Error code 6')
+            print('WTF')
+            print(('ignoring '+TeamList[teamNum]))
             toDelete.append(TeamList[teamNum])
     for i in toDelete:
         TeamList.remove(i)
@@ -151,24 +151,24 @@ def go(rounds):
                 #print("A match will now begin between "+foo+" and "+bar)
             matchScore = Comparator(rounds, team2, team1)
             if debug:
-                print matchScore
+                print(matchScore)
             scoreArray[TeamList.index(foo)] += matchScore[1]
             scoreArray[TeamList.index(bar)] += matchScore[0]
     if debug:
         print('-----------------------Game-Over-----------------------')
-        print('After ' + str(rounds) + " rounds, the scores are:")
+        print(('After ' + str(rounds) + " rounds, the scores are:"))
     bestScore = 0
     bestScoreInd = 9999
-    for p in xrange(len(TeamList)):
+    for p in range(len(TeamList)):
         if debug:
-            print(TeamList[p] + " : " + str(scoreArray[p]))
+            print((TeamList[p] + " : " + str(scoreArray[p])))
         if (bestScore < scoreArray[p]):
             bestScore = scoreArray[p]
             #print(bestScore)
             bestScoreInd = p
             #print(bestScoreInd)
-    print('The winner was: ' + TeamList[bestScoreInd])
-    completeScore = zip(TeamList, scoreArray)
+    print(('The winner was: ' + TeamList[bestScoreInd]))
+    completeScore = list(zip(TeamList, scoreArray))
     completeScore = sorted(completeScore, key = lambda x: x[1], reverse = True)
     return (completeScore, toDelete)
 

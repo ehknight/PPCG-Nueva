@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 from werkzeug import secure_filename
 from tinydb import TinyDB, Query
 from ast import literal_eval
-from flask.ext.stormpath import StormpathManager,login_required, user
 
 from uploads.PD.contest import go as PD_contestMain
 from econuploads.contest import go as econ_contestMain
@@ -11,15 +10,21 @@ from econuploadswithnoise.contest import go as econ_noise_contestMain
 from uploads.TTT.contest import go as TTT_contestMain
 from random import randrange
 
-app = Flask(__name__)
-DEBUG = False
+from werkzeug.contrib.fixers import ProxyFix
+from flask_dance.contrib.google import make_google_blueprint, google
 
-app.config['SECRET_KEY'] = open("secretkey.txt").read()
-app.config['STORMPATH_API_KEY_FILE'] = '~/.stormpath/apiKey.properties'
-app.config['STORMPATH_APPLICATION'] = 'PPCG@Nueva'
-app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
-app.config['STORMPATH_ENABLE_FORGOT_PASSWORD'] = True
-stormpath_manager = StormpathManager(app)
+app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app)
+app.secret_key = open("secretkey.txt").read()
+blueprint = make_google_blueprint(
+    client_id=open("clientid.txt").read(),
+    client_secret=open("clientsecret.txt").read(),
+    scope=["profile", "email"]
+)
+app.register_blueprint(blueprint)
+
+# app = Flask(__name__)
+DEBUG = False
 
 challengeAcronym = "TTT"
 
@@ -72,6 +77,15 @@ You'll also write a function <tt>pick</tt> which picks a board for you to play o
 </p><p>
 Thanks for taking part in PPCG. Good luck and have fun!</p>"""
 
+def get_name():
+    resp = google.get("/oauth2/v2/userinfo")
+    print resp
+    assert resp.ok
+    name = resp.json()["email"].split("@")[0]
+    name = name.replace('.','__').replace(',','___')
+    return name
+
+@app.route('/account.html')
 @app.route('/')
 def initialHomehtml():
     return render_template('index.html')
@@ -100,15 +114,17 @@ def allowed_file(filename):
 def fileExt(filename):
     return filename.rsplit('.', 1)[1]
 
-@login_required
 @app.route('/submit.html')
 def submithtml():
+    if not google.authorized:
+            return redirect(url_for("google.login"))
     return render_template('submit.html')
 
 @app.route('/upload', methods=['POST'])
-@login_required
 def upload():
-    print (str(user.given_name)+'just uploaded a new program!')
+    try: name = get_name()
+    except AssertionError: return redirect(url_for("google.login"))
+    print((str(name)+'just uploaded a new program!'))
     file = request.files['file']
     checks = request.form.getlist('check')
     checked=False
@@ -121,9 +137,9 @@ def upload():
         return render_template('submit.html', checked=checked)
     elif file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        uniqueFilename= user.given_name+' '+user.surname+'.'+fileExt(filename)
+        uniqueFilename= name+'.'+fileExt(filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], uniqueFilename))
-        user.custom_data['programName'] = uniqueFilename
+        # user.custom_data['programName'] = uniqueFilename
         return render_template('index.html', success=True)
     else:
         return render_template('index.html', success=False)
@@ -134,7 +150,7 @@ def prizeshtml():
     t2=[x['prize'] for x in t1]
     t3=[x['desc'] for x in t1]
     return render_template('prizes.html',
-                           prizes=zip(t2,t3))
+                           prizes=list(zip(t2,t3)))
 
 @app.route('/donate.html')
 def donatehtml():
@@ -167,9 +183,10 @@ def stupidcss():
 def abouthtml():
     return render_template('about.html')
 
-@app.route('/account')
-@login_required
+# @app.route('/account')
 def accounthtml():
+    if not google.authorized:
+        return redirect(url_for("google.login"))
     try:
         tempPN = user.custom_data['programName']
     except KeyError:
@@ -192,14 +209,16 @@ def prisonersdilemma():
     return render_template('prisoners-dilemma.html')
 
 @app.route("/submit-econ.html")
-@login_required
 def submit_econ():
+    if not google.authorized:
+        return redirect(url_for("google.login"))
     return render_template('submit-econ.html')
 
 @app.route('/upload-econ', methods=['POST'])
-@login_required
 def upload_econ():
-    print ('ECON: '+str(user.given_name)+'just uploaded a new program!')
+    try: name = get_name()
+    except AssertionError: return redirect(url_for("google.login"))
+    print(('ECON: '+name+'just uploaded a new program!'))
     file = request.files['file']
     checks = request.form.getlist('check')
     checked=False
@@ -212,9 +231,9 @@ def upload_econ():
         return render_template('submit-econ.html', checked=checked)
     elif file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        uniqueFilename= user.given_name+' '+user.surname+'.'+fileExt(filename)
+        uniqueFilename= name+'.'+fileExt(filename)
         file.save(os.path.join(app.config['ECON_UPLOAD_FOLDER'], uniqueFilename))
-        user.custom_data['programName'] = uniqueFilename
+        # user.custom_data['programName'] = uniqueFilename
         return render_template('index.html', success=True)
     else:
         return render_template('index.html', success=False)
@@ -235,14 +254,16 @@ def leaderboard_econ_html():
                            ignoreLen = len(econ_ignoreList), ignore=econ_ignoreList)
 
 @app.route('/submit-econ-with-noise.html')
-@login_required
 def submit_econ_with_noise():
+    if not google.authorized:
+            return redirect(url_for("google.login"))
     return render_template('submit-econ-with-noise.html')
 
 @app.route('/upload-econ-with-noise', methods=['POST'])
-@login_required
 def upload_econ_with_noise():
-    print ('ECON WITH NOISE: '+str(user.given_name)+'just uploaded a new program!')
+    try: name = get_name()
+    except AssertionError: return redirect(url_for("google.login"))
+    print(('ECON WITH NOISE: '+name+'just uploaded a new program!'))
     file = request.files['file']
     checks = request.form.getlist('check')
     checked=False
@@ -255,9 +276,9 @@ def upload_econ_with_noise():
         return render_template('submit-econ-with-noise.html', checked=checked)
     elif file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        uniqueFilename= user.given_name+' '+user.surname+'.'+fileExt(filename)
+        uniqueFilename= name+'.'+fileExt(filename)
         file.save(os.path.join(app.config['ECON_SIGNAL_UPLOAD_FOLDER'], uniqueFilename))
-        user.custom_data['programName'] = uniqueFilename
+        # user.custom_data['programName'] = uniqueFilename
         return render_template('index.html', success=True)
     else:
         return render_template('index.html', success=False)
@@ -288,4 +309,4 @@ def faviconico():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/png')
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0', port = 80, debug=DEBUG, use_reloader=True)
+    app.run(host = '0.0.0.0', port = 5000, debug=DEBUG, use_reloader=True)
