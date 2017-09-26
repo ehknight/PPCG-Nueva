@@ -1,7 +1,7 @@
 import random
 from itertools import chain
 import os, sys
-import execjs
+import js2py
 import signal
 
 def testEntry(teamNum, curState, activeBoardNum, wonBoards):

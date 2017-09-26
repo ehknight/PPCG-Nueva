@@ -33,6 +33,8 @@ app.config['ECON_UPLOAD_FOLDER'] = 'econuploads/'
 app.config['ECON_SIGNAL_UPLOAD_FOLDER'] = 'econuploads-with-noise/'
 app.config['ALLOWED_EXTENSIONS'] = set(['py','js'])
 app.config['ROUND_NUMBERS'] = 30
+app.config['ECON_ROUND_NUMBERS'] = 34
+app.config['ECON_NOISE_ROUND_NUMBERS'] = 29
 
 teamsScores = []
 ignoreList = []
@@ -243,7 +245,7 @@ def run_econ():
     print('ECON: running judge program')
     global econ_teamsScores
     global econ_ignoreList
-    totalReturn=econ_contestMain(app.config['ROUND_NUMBERS'])
+    totalReturn=econ_contestMain(app.config['ECON_ROUND_NUMBERS'])
     econ_teamsScores=totalReturn[0]
     econ_ignoreList=totalReturn[1]
     return redirect('/leaderboard-econ.html')
@@ -288,7 +290,7 @@ def run_econ_with_noise():
     print('ECON: running judge program')
     global econ_signal_teamsScores
     global econ_signal_ignoreList
-    totalReturn = econ_noise_contestMain(app.config['ROUND_NUMBERS'])
+    totalReturn = econ_noise_contestMain(app.config['ECON_NOISE_ROUND_NUMBERS'])
     econ_signal_teamsScores=totalReturn[0]
     econ_signal_ignoreList=totalReturn[1]
     return redirect('/leaderboard-econ-with-noise.html')
@@ -309,4 +311,4 @@ def faviconico():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/png')
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0', port = 5000, debug=DEBUG, use_reloader=True)
+    app.run(host = '0.0.0.0', port = 80, debug=DEBUG, use_reloader=True)
