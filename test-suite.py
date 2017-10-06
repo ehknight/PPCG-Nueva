@@ -33,7 +33,7 @@ def main(script_path):
     print "tests passed"
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser = argparse.ArgumentParser(description='Test your Prisoners Dilemma code')
     parser.add_argument('path', type=str)
     args = parser.parse_args()
     main(args.path)
